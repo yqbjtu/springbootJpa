@@ -10,7 +10,7 @@ public class HelloWorldController {
 
 
     @ApiOperation(value = "hello demo", notes = "just for demo")
-    @GetMapping(value = "/hello", produces = "text/xml;charset=UTF-8")
+    @GetMapping(value = "/hello", produces = "text/plain;charset=UTF-8")
     public String hello() {
         return "Hello World";
     }

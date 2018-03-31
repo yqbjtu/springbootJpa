@@ -34,7 +34,7 @@ public class UserController {
         @ApiImplicitParam(name = "password", value = "密码", required = true ,dataType = "String", paramType = "query"),
         @ApiImplicitParam(name = "fullName", value = "fullName", required = true ,dataType = "String", paramType = "query"),
         @ApiImplicitParam(name = "email", value = "email", required = true ,dataType = "String", paramType = "query"),
-        @ApiImplicitParam(name = "usertype", allowableValues="1,2,3", required = false ,dataType = "Integer", paramType = "query"),
+        @ApiImplicitParam(name = "usertype", allowableValues="1,2,3", required = false ,dataType = "int", paramType = "query"),
     	@ApiImplicitParam(name = "dateformat", value = "dateformat", required = false ,dataType = "String", paramType = "query"),
     	@ApiImplicitParam(name = "timeforamt", value = "timeforamt", required = false ,dataType = "String", paramType = "query"),
     	@ApiImplicitParam(name = "timezone", value = "timezone", required = false ,dataType = "String", paramType = "query"),
@@ -143,8 +143,8 @@ public class UserController {
     }
     
     @ApiOperation(value = "delete user", notes = "delete user by id")
-    @ApiImplicitParam(name = "id", required = false, dataType = "Integer", paramType = "path")
-    @DeleteMapping(value = "/delete/{id}", produces = "text/xml;charset=UTF-8")
+    @ApiImplicitParam(name = "id", required = true, dataType = "int", paramType = "path")
+    @DeleteMapping(value = "/delete/{id}", produces = "text/plain;charset=UTF-8")
     public @ResponseBody String deleteUser(@PathVariable Integer id) {
          userRepository.delete(id);
          return  "delete id '" + id + "'";
