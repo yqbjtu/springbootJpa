@@ -1,29 +1,22 @@
 package com.yq.demo.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yq.demo.dao.UserJpaRepository;
 import com.yq.demo.entity.User;
 import com.yq.demo.service.UserService;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 @Controller   
 @RequestMapping(path="/user") 
@@ -35,13 +28,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
-    public  @ResponseBody User addNewUser(@RequestParam String userName,@RequestParam String password,
-            @RequestParam String fullName, @RequestParam String email,
-            @RequestParam String usertype, @RequestParam String dateformat,
+    @ApiOperation(value = "add new user", notes = "add new user to system")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name = "userName", value = "userName", required = true, dataType = "String", paramType = "query"),
+        @ApiImplicitParam(name = "password", value = "密码", required = true ,dataType = "String", paramType = "query"),
+        @ApiImplicitParam(name = "fullName", value = "fullName", required = true ,dataType = "String", paramType = "query"),
+        @ApiImplicitParam(name = "email", value = "email", required = true ,dataType = "String", paramType = "query"),
+        @ApiImplicitParam(name = "usertype", allowableValues="1,2,3", required = false ,dataType = "Integer", paramType = "query"),
+    	@ApiImplicitParam(name = "dateformat", value = "dateformat", required = false ,dataType = "String", paramType = "query"),
+    	@ApiImplicitParam(name = "timeforamt", value = "timeforamt", required = false ,dataType = "String", paramType = "query"),
+    	@ApiImplicitParam(name = "timezone", value = "timezone", required = false ,dataType = "String", paramType = "query"),
+    	@ApiImplicitParam(name = "language", value = "language", required = false ,dataType = "String", paramType = "query")
+    })
+    
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
+    public  @ResponseBody User addNewUser(
+    		@RequestParam String userName,
+    		@RequestParam String password,
+            @RequestParam String fullName,
+            @RequestParam String email,
+            @RequestParam Integer usertype,
+            @RequestParam(value = "dateformat", defaultValue = "yyyy-MM-dd") String dateformat,
             @RequestParam(value = "timeforamt", defaultValue = "HH:mm:ss") String timeforamt,
             @RequestParam(value = "timezone", defaultValue = "GMT+8") String timezone,
-            @RequestParam String language) {
+            @RequestParam(value = "language", defaultValue = "zh_CN") String language) {
 
         User user = new User();
         user.setUsername(userName);
@@ -50,7 +60,7 @@ public class UserController {
         user.setLanguage(language);
         user.setPassword(password);
         user.setActive(1);
-        user.setUserType(1);
+        user.setUserType(2);
         user.setCan_delete(1);
         user.setTimeZone(timezone);
         user.setTimeFormat(timeforamt);
@@ -60,18 +70,21 @@ public class UserController {
         return user;
     }
 
-    @GetMapping(path="/find")
+    @ApiOperation(value = "推送是否成功", notes = "向所有App用户推送")
+    @ApiImplicitParam(name = "name", value = "userName", required = true, dataType = "String", paramType = "query")
+    @GetMapping(value = "/find", produces = "application/json;charset=UTF-8")
     public @ResponseBody User findByName (@RequestParam String name) {
         return userRepository.getByUserName(name);
     }
 
-
-    @GetMapping(path="/all")
+    @ApiOperation(value = "all users json", notes = "get all users")
+    @GetMapping(value = "/all", produces = "application/json;charset=UTF-8")
     public @ResponseBody Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @GetMapping(path="/init")
+    @ApiOperation(value = "initial users", notes = "add some users to db")
+    @PostMapping(path="/init", produces = "application/json;charset=UTF-8")
     public @ResponseBody Iterable<User> insertInitialUsers() {
         User user = new User();
         user.setUsername("张三");
@@ -128,14 +141,18 @@ public class UserController {
         
         return userRepository.findAll();
     }
-
-    @GetMapping(path="/delete/{id}")
+    
+    @ApiOperation(value = "delete user", notes = "delete user by id")
+    @ApiImplicitParam(name = "id", required = false, dataType = "Integer", paramType = "path")
+    @DeleteMapping(value = "/delete/{id}", produces = "text/xml;charset=UTF-8")
     public @ResponseBody String deleteUser(@PathVariable Integer id) {
          userRepository.delete(id);
          return  "delete id '" + id + "'";
     }
 
-    @RequestMapping("/findByFullName/{fullname}")
+    @ApiOperation(value = "findByFullName", notes = "find by fullName")
+    @ApiImplicitParam(name = "fullname", value = "fullname", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "/findByFullName/{fullname}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public User getUserByFullName(@PathVariable String fullname){
         User user = userRepository.getByFullName(fullname);
