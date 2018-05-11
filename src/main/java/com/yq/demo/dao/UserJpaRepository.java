@@ -1,11 +1,11 @@
 package com.yq.demo.dao;
 
-import java.util.List;
-
+import com.yq.demo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Repository;
 
-import com.yq.demo.entity.User;
+import java.util.List;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, Integer> {

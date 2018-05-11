@@ -1,46 +1,26 @@
 package com.yq.demo.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.yq.demo.dao.UserJpaRepository;
 import com.yq.demo.entity.User;
 
-@Service
-@Transactional
-public class UserService {
-    @Autowired
-    private UserJpaRepository userJpaRepo;
+import java.util.List;
 
-    public long userCount(){
-        return userJpaRepo.count();
-    }
 
-    public List<User> getAllUser() {
-        return userJpaRepo.findAll();
-    }
+public interface UserService {
 
-    public User addUser(User user) {
-        return userJpaRepo.save(user);
-    }
+    public long userCount();
 
-    public void delUser(Integer id) {
-        userJpaRepo.delete(id);
-    }
+    public String showSpecificClassName();
 
-    public User updateUser(User user) {
-        return userJpaRepo.save(user);
-    }
+    public List<User> getAllUser();
 
-    public User getUserByName(String username) {
-        return userJpaRepo.getByUserName(username);
-    }
+    public User addUser(User user);
 
-    public User getUserByID(Integer id) {
-        return userJpaRepo.findOne(id);
-    }
+    public void delUser(Integer id);
+
+    public User updateUser(User user);
+
+    public User getUserByName(String username);
+
+    public User getUserByID(Integer id);
 
 }

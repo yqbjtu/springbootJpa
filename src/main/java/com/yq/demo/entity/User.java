@@ -22,7 +22,9 @@ public class User {
     @Column(name="username",length=32, nullable=false, unique=true)
     private String userName;
 
-    //1 stands for built-in, 2 stands for created , 3 stands for ldap
+    /*
+    1 stands for built-in, 2 stands for created , 3 stands for ldap
+     */
     @Column(name="usertype")
     private Integer userType;
 

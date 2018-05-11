@@ -1,6 +1,7 @@
 package com.yq.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class UserController {
     private UserJpaRepository userRepository;
 
     @Autowired
+    @Qualifier("myUserServiceImpl")
     private UserService userService;
 
     @ApiOperation(value = "add new user", notes = "add new user to system")
@@ -70,7 +72,7 @@ public class UserController {
         return user;
     }
 
-    @ApiOperation(value = "推送是否成功", notes = "向所有App用户推送")
+    @ApiOperation(value = "否成功", notes = "所有用户")
     @ApiImplicitParam(name = "name", value = "userName", required = true, dataType = "String", paramType = "query")
     @GetMapping(value = "/find", produces = "application/json;charset=UTF-8")
     public @ResponseBody User findByName (@RequestParam String name) {
@@ -159,4 +161,11 @@ public class UserController {
         return user;
     }
 
+    @ApiOperation(value = "testAutowired", notes = "")
+    @ApiImplicitParam(name = "name", value = "Name", required = true, dataType = "String", paramType = "query")
+    @GetMapping(value = "/testAutowired", produces = "application/json;charset=UTF-8")
+    public String testAutowired (@RequestParam String name) {
+        String name1 = userService.showSpecificClassName();
+        return "{\"name\"" + ":\"" + name1 + "\"}";
+    }
 }
