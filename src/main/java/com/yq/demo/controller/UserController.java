@@ -1,8 +1,14 @@
 package com.yq.demo.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.yq.demo.dao.UserJpaRepository;
+import com.yq.demo.entity.User;
+import com.yq.demo.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,16 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.yq.demo.dao.UserJpaRepository;
-import com.yq.demo.entity.User;
-import com.yq.demo.service.UserService;
+import java.time.LocalDateTime;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
-@Controller   
+@RestController
 @RequestMapping(path="/user") 
 public class UserController {
     @Autowired // This means to get the bean called userRepository
@@ -166,6 +167,11 @@ public class UserController {
     @GetMapping(value = "/testAutowired", produces = "application/json;charset=UTF-8")
     public String testAutowired (@RequestParam String name) {
         String name1 = userService.showSpecificClassName();
-        return "{\"name\"" + ":\"" + name1 + "\"}";
+
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("curentTime", LocalDateTime.now().toString());
+        jsonObj.put("name", name1);
+        return jsonObj.toJSONString();
+
     }
 }
