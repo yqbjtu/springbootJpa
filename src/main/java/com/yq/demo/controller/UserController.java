@@ -172,6 +172,5 @@ public class UserController {
         jsonObj.put("curentTime", LocalDateTime.now().toString());
         jsonObj.put("name", name1);
         return jsonObj.toJSONString();
-
     }
 }

@@ -13,4 +13,5 @@ public interface UserJpaRepository extends JpaRepository<User, Integer> {
     public User getByFullName(String fullname);
     public List<User> getByLanguage(String username);
     public List<User> getByLanguageAndTimeZone(String username, String timeZone);
+
 }
