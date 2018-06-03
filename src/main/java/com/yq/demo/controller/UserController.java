@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/user") 
@@ -161,6 +162,34 @@ public class UserController {
         User user = userRepository.getByFullName(fullname);
         return user;
     }
+
+    @ApiOperation(value = "Query", notes = "find by userName")
+    @ApiImplicitParam(name = "username", value = "username", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "/findByUserNameQuery/{username}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Iterable<User> findByUserNameQuery(@PathVariable String username){
+        List<User> userList = userRepository.findByNameMatchQuery(username);
+        return userList;
+    }
+
+    @ApiOperation(value = "nativeQuery", notes = "find by userName")
+    @ApiImplicitParam(name = "username", value = "username", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "/findByUserNameNativeQuery/{username}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public User findByUserNameNativeQuery(@PathVariable String username){
+        User user = userRepository.findByNameNativeQuery(username);
+        return user;
+    }
+
+    @ApiOperation(value = "SPEL Query", notes = "find by userName")
+    @ApiImplicitParam(name = "username", value = "username", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "/findByUserNameSPEL/{username}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public User getUserByUserNameSPEL(@PathVariable String username){
+        User user = (User) userRepository.findByNameWithSpel(username);
+        return user;
+    }
+
 
     @ApiOperation(value = "testAutowired", notes = "")
     @ApiImplicitParam(name = "name", value = "Name", required = true, dataType = "String", paramType = "query")
