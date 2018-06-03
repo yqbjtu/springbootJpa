@@ -190,6 +190,14 @@ public class UserController {
         return user;
     }
 
+    @ApiOperation(value = "Named Query", notes = "find by userName")
+    @ApiImplicitParam(name = "username", value = "username", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "/findByUserNameNamedQuery/{username}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public User findByUserNameNamedQuery(@PathVariable String username){
+        User user = (User) userRepository.findByDemoName(username);
+        return user;
+    }
 
     @ApiOperation(value = "testAutowired", notes = "")
     @ApiImplicitParam(name = "name", value = "Name", required = true, dataType = "String", paramType = "query")
