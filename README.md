@@ -16,8 +16,8 @@ http://127.0.0.1:8080/user/init
 http://127.0.0.1:8080/user/find?name=xxx  
 http://127.0.0.1:8080/user/findByFullName/{fullname}
 
-mvn package -P prod
-mvn package -P test
+mvn package -P prod  
+mvn package -P test  
 
 @Autowired
     private Environment env;
