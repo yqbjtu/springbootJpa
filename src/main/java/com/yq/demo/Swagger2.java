@@ -16,6 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+//@Profile({"dev", "test"})
 @Profile("dev")
 public class Swagger2 extends WebMvcConfigurationSupport {
     @Bean

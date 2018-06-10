@@ -18,6 +18,10 @@ http://127.0.0.1:8080/user/findByFullName/{fullname}
 
 mvn package -P prod  
 mvn package -P test  
+启动时指定profile
+
+使用默认的mvn package进行打包，然后在启动的时候可以随意指定按照prod还是test、dev进行启动
+java -jar -Dspring.profiles.active=prod target/demo-1.0.0-SNAPSHOT.jar 
 
 @Autowired
     private Environment env;
