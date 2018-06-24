@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="/user") 
@@ -30,6 +31,10 @@ public class UserController {
 
     @Autowired
     @Qualifier("myUserServiceImpl")
+    private UserService myUserService;
+
+    @Autowired
+    @Qualifier("userServiceImpl")
     private UserService userService;
 
     @ApiOperation(value = "add new user", notes = "add new user to system")
@@ -203,11 +208,23 @@ public class UserController {
     @ApiImplicitParam(name = "name", value = "Name", required = true, dataType = "String", paramType = "query")
     @GetMapping(value = "/testAutowired", produces = "application/json;charset=UTF-8")
     public String testAutowired (@RequestParam String name) {
-        String name1 = userService.showSpecificClassName();
+        String name1 = myUserService.showSpecificClassName();
 
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("curentTime", LocalDateTime.now().toString());
+        jsonObj.put("currentTime", LocalDateTime.now().toString());
         jsonObj.put("name", name1);
+        return jsonObj.toJSONString();
+    }
+
+    @ApiOperation(value = "testMap", notes = "")
+    @ApiImplicitParam(name = "name", value = "Name", required = true, dataType = "String", paramType = "query")
+    @GetMapping(value = "/testMap", produces = "application/json;charset=UTF-8")
+    public String testJPAReturnMap(@RequestParam String name) {
+        List<Map<String, Object>> listMap = userService.myFindSomeColumnsByNativeQuery();
+
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("currentTime", LocalDateTime.now().toString());
+        jsonObj.put("listMap", listMap);
         return jsonObj.toJSONString();
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Simple to Introduction
@@ -67,6 +68,11 @@ public class MyUserServiceImpl implements UserService {
     @Override
     public User getUserByID(Integer id) {
         return userJpaRepo.findOne(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> myFindSomeColumnsByNativeQuery() {
+        return null;
     }
 
 }

@@ -6,13 +6,17 @@ package com.yq.demo.service.impl;
 import com.yq.demo.dao.UserJpaRepository;
 import com.yq.demo.entity.User;
 import com.yq.demo.service.UserService;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Simple to Introduction
@@ -26,6 +30,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserJpaRepository userJpaRepo;
+
+    @Autowired
+    EntityManager entityManager;
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
@@ -70,4 +77,19 @@ public class UserServiceImpl implements UserService {
         return userJpaRepo.findOne(id);
     }
 
+    @Override
+    public List<Map<String, Object>> myFindSomeColumnsByNativeQuery(){
+        //@Query(value = "select u.id, u.active, u.username  from user u where u.username=?1", nativeQuery = true)
+        Query query = entityManager.createNativeQuery("select u.id, u.active, u.username from user u");
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List rows = query.getResultList();
+
+        for (Object obj : rows) {
+            Map row = (Map) obj;
+            System.out.print("id = " + row.get("id"));
+            System.out.print(", name = " + row.get("active"));
+            System.out.println(", age = " + row.get("username"));
+        }
+        return rows;
+    }
 }

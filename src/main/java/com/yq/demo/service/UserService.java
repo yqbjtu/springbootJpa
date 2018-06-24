@@ -3,6 +3,7 @@ package com.yq.demo.service;
 import com.yq.demo.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface UserService {
@@ -23,4 +24,5 @@ public interface UserService {
 
     public User getUserByID(Integer id);
 
+    public List<Map<String, Object>> myFindSomeColumnsByNativeQuery();
 }
